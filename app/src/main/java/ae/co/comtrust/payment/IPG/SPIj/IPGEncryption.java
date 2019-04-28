@@ -1,5 +1,7 @@
 package ae.co.comtrust.payment.IPG.SPIj;
 
+import android.util.Base64;
+
 import java.security.MessageDigest;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -24,7 +26,7 @@ public class IPGEncryption
       aes.init(1, key);
       byte[] ciphertext = aes.doFinal(plainText.getBytes());
       
-      return new BASE64Encoder().encode(ciphertext);
+      return new String(Base64.encode(ciphertext,Base64.DEFAULT),"UTF-8");
     } catch (Exception e) {
       throw new TransactionException("Error: 9102. " + e.getMessage());
     }
@@ -40,7 +42,7 @@ public class IPGEncryption
       Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
       aes.init(2, key);
       
-      byte[] encString = new BASE64Decoder().decodeBuffer(cypherText);
+      byte[] encString = Base64.decode(cypherText,Base64.DEFAULT);
       output = new String(aes.doFinal(encString),"UTF-8");
     } catch (Exception e) {
       //throw new TransactionException("Error: 9102. " + e.getMessage());
